@@ -6,11 +6,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 50px;
 }
 
 .Container {
-  max-width: 1000px;
+  max-width: 80rem;
 }
 
 .RecipeList {
@@ -30,5 +30,5 @@ span {
 .logo {
   width: 300px;
   height: 300px;
-  margin: 20px;
+  margin: 30px;
 }

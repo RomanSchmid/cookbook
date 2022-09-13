@@ -22,7 +22,8 @@ function Recipe(props) {
                     </img>
                 </div>
                 <div>
-                    <p>
+                    <p
+                        className={styles.paragraph}>
                         {props.recipe.description}
                     </p>
                 </div>
