@@ -1,0 +1,14 @@
+.card {
+    width: 20rem;
+    box-shadow: 0 0 5px rgba(136, 136, 136, 0.7);
+    height: auto;
+}
+
+.heading {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.image {
+    padding: 10px 0 20px 0;
+}

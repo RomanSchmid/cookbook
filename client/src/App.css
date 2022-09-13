@@ -3,13 +3,32 @@
 .App {
   text-align: center;
   font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-h1 {
-  font-size: 4rem;
+.Container {
+  max-width: 1000px;
+}
+
+.RecipeList {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 span {
   font-weight: 700;
   color: rgb(108, 99, 255);
+}
+
+.logo {
+  width: 300px;
+  height: 300px;
+  margin: 20px;
 }
