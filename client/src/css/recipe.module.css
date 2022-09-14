@@ -8,7 +8,7 @@
 
 .navBarButtons {
     display: flex;
-    gap: 15px;
+    gap: 5px;
 }
 
 .recipeList {
@@ -37,6 +37,13 @@
     padding: 10px 0 20px 0;
 }
 
+.recipeText {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
 .paragraph {
-    text-align: center;
+    text-align: left;
 }

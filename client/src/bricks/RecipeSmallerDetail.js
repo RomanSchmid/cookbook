@@ -7,7 +7,9 @@ function RecipeSmallerDetail(props) {
         return recipeList.map((recipe) => {
             return (
                 <Card 
-                    className={styles.card}>
+                    className={styles.card}
+                    key={recipe.id}
+                >
                     <Card.Body>
                         <div>
                             <h2 
@@ -24,7 +26,8 @@ function RecipeSmallerDetail(props) {
                             </img>
                         </div>
                         <div
-                            style={{ overflow: "hidden", height: "1.5em"}}
+                            //style={{ overflow: "hidden", height: "1.5em"}}
+                            className={styles.recipeText}
                         >
                             <p
                                 className={styles.paragraph}>
