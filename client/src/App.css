@@ -11,16 +11,18 @@
 
 .Container {
   max-width: 80rem;
+  width: 100%;
 }
 
-.RecipeList {
+/* .RecipeList {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 15px;
-}
+  width: 100%;
+} */
 
 span {
   font-weight: 700;

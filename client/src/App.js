@@ -1,6 +1,6 @@
 import './App.css';
 import RecipeList from './bricks/RecipeList';
-import cookbookLogo from "./cookbook-logo.svg";
+import cookbookLogo from "./images/cookbook-logo.svg";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import recipeListData from "./recipes.json"
 

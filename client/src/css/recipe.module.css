@@ -1,4 +1,27 @@
+.navBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 30px;
+}
+
+.navBarButtons {
+    display: flex;
+    gap: 15px;
+}
+
+.recipeList {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
 .card {
+    display: flex;
     width: 25rem;
     box-shadow: 0 0 5px rgba(136, 136, 136, 0.7);
     height: auto;
