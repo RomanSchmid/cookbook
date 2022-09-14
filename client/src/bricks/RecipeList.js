@@ -37,7 +37,7 @@ function RecipeList(props) {
 
   return (
     <div>
-      <Navbar bg="light">
+      <Navbar bg="white">
         <div className={styles.navBar}>
           <Navbar.Brand>Seznam receptů</Navbar.Brand>
             <div>
@@ -51,8 +51,8 @@ function RecipeList(props) {
                   onChange={handleSearchDelete}
                 />
                 <Button
-                  style={{ marginRight: "8px" }}
-                  variant="outline-success"
+                  style={{ margin: "0 5px" }}
+                  variant="outline-primary"
                   type="submit"
                 >
                   <Icon size={1} path={mdiMagnify} />
