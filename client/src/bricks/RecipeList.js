@@ -11,7 +11,7 @@ import { mdiTable, mdiViewGridOutline } from "@mdi/js"; */
 
 function RecipeList(props) {
   const [viewType, setViewType] = useState("bigger");
-  const display = viewType === "bigger";
+  /* const display = viewType === "bigger"; */
 
   return (
     <div>
