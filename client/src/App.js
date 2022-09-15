@@ -1,22 +1,21 @@
+import { Outlet, useNavigate } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import Icon from "@mdi/react";
+import { mdiLoading, mdiAlertOctagonOutline } from "@mdi/js";
 import './App.css';
 import { useEffect, useState } from "react";
-import RecipeList from './bricks/RecipeList';
-import cookbookLogo from "./images/cookbook-logo.svg";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import recipeListData from "./recipes.json"
-
-const cookbook = {
-  name: "Cookbook"
-};
-
-function displayHeading(heading) {
-  return <h1 style={{ fontSize: "5rem" }}>My <span>{heading}</span></h1>
-}
+//import recipeListData from "./recipes.json"
 
 function App() {
-  const [recipesLoadCall, setRecipesLoadCall] = useState({
+  const [listRecipesCall, setListRecipesCall] = useState({
     state: "pending",
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("/recipe/list", {
@@ -24,49 +23,93 @@ function App() {
     }).then(async (response) => {
       const responseJson = await response.json();
       if (response.status >= 400) {
-        setRecipesLoadCall({ state: "error", error: responseJson});
+        setListRecipesCall({ state: "error", error: responseJson});
       } else {
-        setRecipesLoadCall({ state: "success", data: responseJson});
+        setListRecipesCall({ state: "success", data: responseJson});
       }
     });
-  }, []) // prázdné pole podmínek znamená, že kód se spustí pouze jednou
+  }, []);
 
-  function getChild() {
-    switch (recipesLoadCall.state) {
+  function getRecipesListDropdown() {
+    console.log(listRecipesCall);
+    switch (listRecipesCall.state) {
       case "pending":
-        console.log(recipesLoadCall.state)
         return (
-           <div>Pending</div>
+          <Nav.Link disabled={true}>
+            <Icon size={1} path={mdiLoading} spin={true} /> Recipes List
+          </Nav.Link>
         );
       case "success":
-        console.log(recipesLoadCall.state)
         return (
-          <>
-            <div className="Container">
-              {displayHeading(cookbook.name)}
-              <p>Vivamus suscipit tortor <span>eget felis porttitor</span> volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              <img
-                className="logo"
-                src={cookbookLogo}
-                alt="Logo">
-              </img>
-              <div className="RecipeList">
-                <RecipeList recipeList={recipeListData} />
-              </div>
-            </div>
-          </>
+          <NavDropdown title="Select Recipe" id="navbarScrollingDropdown">
+            {listRecipesCall.data.map((recipe) => {
+              return (
+                <NavDropdown.Item
+                  key={recipe.id}
+                  onClick={() =>
+                    navigate("/recipeDetail?id=" + recipe.id)
+                  }
+                >
+                  {recipe.name}
+                </NavDropdown.Item>
+              );
+            })}
+          </NavDropdown>
         );
       case "error":
-        console.log(recipesLoadCall.state)
         return (
-          <div>Error</div>
+          <div>
+            <Icon size={1} path={mdiAlertOctagonOutline} /> Error
+          </div>
         );
       default:
         return null;
     }
   }
 
-  return <div className="App">{getChild()}</div>;
+  return (
+    <div className="App">
+      <Navbar
+        fixed="top"
+        expand={"sm"}
+        className="mb-3"
+        bg="dark"
+        variant="dark"
+      >
+        <Container fluid>
+          <Navbar.Brand>
+            My CookBook
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-sm`} />
+          <Navbar.Offcanvas id={`offcanvasNavbar-expand-sm`}>
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title id={`offcanvasNavbarLabel-expand-sm`}>
+                My CookBook
+              </Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className="justify-content-end flex-grow-1 pe-3">
+                {getRecipesListDropdown()}
+                <Nav.Link 
+                  style={{margin: "0 30px"}}
+                  onClick={() => navigate("recipeList")}
+                >
+                  Recepty
+                </Nav.Link>
+                <Nav.Link
+                  onClick={() => navigate("ingredientList")}
+                  >
+                  Ingredience
+                </Nav.Link>
+              </Nav>
+            </Offcanvas.Body>
+          </Navbar.Offcanvas>
+        </Container>
+      </Navbar>
+
+      <Outlet />
+    </div>
+  );
 }
 
 export default App;

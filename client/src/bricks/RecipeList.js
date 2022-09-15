@@ -3,6 +3,7 @@ import RecipeBiggerDetail from "./RecipeBiggerDetail";
 import RecipeSmallerDetail from "./RecipeSmallerDetail";
 import RecipeTableList from "./RecipeTableList";
 import styles from "../css/recipe.module.css";
+import NewRecipe from "./NewRecipe";
 
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
@@ -15,7 +16,7 @@ function RecipeList(props) {
   const [viewType, setViewType] = useState("bigger");
   const [searchBy, setSearchBy] = useState("");
 
-  const filteredStudentList = useMemo(() => {
+  const filteredRecipeList = useMemo(() => {
     return props.recipeList.filter((item) => {
       return (
         item.name
@@ -59,8 +60,12 @@ function RecipeList(props) {
                 </Button>
               </Form>
             </div>
+            <div>
+              <NewRecipe />
+            </div>
             <div className={styles.navBarButtons}>
               <Button
+                className={"d-none d-md-block"}
                 variant="outline-primary"
                 onClick={() => setViewType("bigger")}
               >
@@ -82,9 +87,9 @@ function RecipeList(props) {
         </div>
       </Navbar>
       <div className={styles.recipeList}>
-        {viewType === "bigger" ? <RecipeBiggerDetail recipeList={filteredStudentList} /> : null}
-        {viewType === "smaller" ? <RecipeSmallerDetail recipeList={filteredStudentList} /> : null}
-        {viewType === "table" ? <RecipeTableList recipeList={filteredStudentList} /> : null}
+        {viewType === "bigger" ? <RecipeBiggerDetail recipeList={filteredRecipeList} /> : null}
+        {viewType === "smaller" ? <RecipeSmallerDetail recipeList={filteredRecipeList} /> : null}
+        {viewType === "table" ? <RecipeTableList recipeList={filteredRecipeList} /> : null}
       </div>
     </div>
   );

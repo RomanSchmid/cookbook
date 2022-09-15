@@ -6,9 +6,23 @@
     padding: 0 30px;
 }
 
+.mainHeading {
+    font-size: 3rem;
+}
+
 .navBarButtons {
-    display: flex;
-    gap: 5px;
+    display: none;
+}
+
+@media only screen and (min-width: 600px) {
+    .navBarButtons {
+        display: flex;
+        gap: 5px;
+    }
+
+    .mainHeading {
+        font-size: 5rem;
+    }
 }
 
 .recipeList {

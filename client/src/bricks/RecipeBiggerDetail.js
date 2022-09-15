@@ -7,7 +7,9 @@ function RecipeBiggerDetail(props) {
         return recipeList.map((recipe) => {
             return (
                 <Card 
-                    className={styles.card}>
+                    className={styles.card}
+                    key={recipe.id}
+                >
                     <Card.Body>
                         <div>
                             <h2 
