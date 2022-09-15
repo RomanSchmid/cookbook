@@ -3,6 +3,7 @@ import Card from "react-bootstrap/Card";
 import styles from "../css/recipe.module.css";
 
 function RecipeSmallerDetail(props) {
+
     function getRecipeList(recipeList) {
         return recipeList.map((recipe) => {
             return (

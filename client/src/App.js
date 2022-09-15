@@ -31,7 +31,7 @@ function App() {
   }, []);
 
   function getRecipesListDropdown() {
-    console.log(listRecipesCall);
+    /* console.log(listRecipesCall); */
     switch (listRecipesCall.state) {
       case "pending":
         return (

@@ -3,24 +3,41 @@
 import { useState } from 'react'
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 
-function NewRecipe() {
+function NewRecipe(props) {
+    /* console.log(props.ingredients) */
     const [isModalShown, setShow] = useState(false);
   
     const handleShowModal = () => setShow(true);
     const handleCloseModal = () => setShow(false);
 
     const [formData, setFormData] = useState({
-        name: "",
-        procedure: "",
-        ingredients: [],
-        amount: 0,
-        unit: "",
+        "name": "",
+        "description": "",
+        "imgUri": "",
+        "ingredients": [
+            {
+                "id": "",
+                "amount": "",
+                "unit": ""
+            }
+        ]
     });
 
     const setField = (name, val) => {
+        /* console.log(val) */
+
         return setFormData((formData) => {
-            const newData = { ...formData };
-            newData[name] = val;
+            const newData = { ...formData };          
+
+            if (name === "id") {
+                newData["ingredients"][name] = val;
+            } else if (name === "amount") {
+                newData["ingredients"][name] = parseInt(val);
+            } else if (name === "unit") {
+                newData["ingredients"][name] = val;
+            } else {
+                newData[name] = val;
+            }
             return newData
         });
     }
@@ -63,7 +80,7 @@ function NewRecipe() {
                             <Form.Control 
                                 as="textarea"
                                 rows={5}
-                                onChange={(e) => setField("procedure", e.target.value)}
+                                onChange={(e) => setField("description", e.target.value)}
                             />
                         </Form.Group>
 
@@ -71,12 +88,10 @@ function NewRecipe() {
                             <Form.Group as={Col} className="mb-3">
                                 <Form.Label>Ingredience</Form.Label>
                                 <Form.Select
-                                    onChange={(e) => setField("ingredients", e.target.value)}
-                                >
+                                    onChange={(e) => setField("id", e.target.value)}
+                                >   
                                     <option value=""></option>
-                                    <option>Cibule</option>
-                                    <option>Mrkev</option>
-                                    <option>Brambory</option>
+                                    {props.ingredients.map(opt => <option value={opt.id}>{opt.name}</option>)}
                                 </Form.Select>
                             </Form.Group>
 
@@ -84,7 +99,9 @@ function NewRecipe() {
                                 <Form.Label>Počet</Form.Label>
                                 <Form.Control 
                                         type="number"
+                                        min="0"
                                         rows={1}
+                                        placeholder="0"
                                         onChange={(e) => setField("amount", e.target.value)}
                                 />
                             </Form.Group>

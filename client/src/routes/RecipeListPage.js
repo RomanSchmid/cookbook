@@ -34,28 +34,32 @@ function RecipeListPage() {
     });
   }, [recipeId])
 
-/*   useEffect(() => {
-    fetch(`http://localhost:3000/ingredient/list?id=${recipeId}`, {
+  const [ingredientsCall, setIngredientsCall] = useState({
+    state: "pending",
+  });
+
+  useEffect(() => {
+    fetch("ingredient/list", {
       method: "GET",
     }).then(async (response) => {
       const responseJson = await response.json();
       if (response.status >= 400) {
-        setIngredientsLoadCall({ state: "error", error: responseJson});
+        setIngredientsCall({ state: "error", error: responseJson});
       } else {
-        setIngredientsLoadCall({ state: "success", data: responseJson});
+        setIngredientsCall({ state: "success", data: responseJson});
       }
     });
-  }, [recipeId]) */
+  }, []);
 
   function getChild() {
     switch (recipesLoadCall.state) {
       case "pending":
-        console.log(recipesLoadCall.state)
+        /* console.log(recipesLoadCall.state) */
         return (
            <div>Pending</div>
         );
       case "success":
-        console.log(recipesLoadCall.state)
+        /* console.log(recipesLoadCall.state) */
         return (
           <>
             <div className="container">
@@ -67,13 +71,16 @@ function RecipeListPage() {
                 alt="Logo">
               </img>
               <div className="RecipeList">
-                <RecipeList recipeList={recipesLoadCall.data} />
+                <RecipeList 
+                  recipeList={recipesLoadCall.data}
+                  ingredientsList={ingredientsCall.data}
+                />
               </div>
             </div>
           </>
         );
       case "error":
-        console.log(recipesLoadCall.state)
+        /* console.log(recipesLoadCall.state) */
         return (
           <div>Error</div>
         );

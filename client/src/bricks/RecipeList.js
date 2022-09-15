@@ -12,12 +12,13 @@ import Form from "react-bootstrap/Form";
 import Icon from "@mdi/react";
 import { mdiMagnify } from "@mdi/js";
 
-function RecipeList(props) {
+function RecipeList({ ingredientsList, recipeList}) {
+
   const [viewType, setViewType] = useState("bigger");
   const [searchBy, setSearchBy] = useState("");
 
   const filteredRecipeList = useMemo(() => {
-    return props.recipeList.filter((item) => {
+    return recipeList.filter((item) => {
       return (
         item.name
           .toLocaleLowerCase()
@@ -25,7 +26,7 @@ function RecipeList(props) {
         item.description.toLocaleLowerCase().includes(searchBy.toLocaleLowerCase())
       );
     });
-  }, [searchBy, props.recipeList]);
+  }, [searchBy, recipeList]);
 
   function handleSearch(event) {
     event.preventDefault();
@@ -61,7 +62,10 @@ function RecipeList(props) {
               </Form>
             </div>
             <div>
-              <NewRecipe />
+              <NewRecipe
+                key={ingredientsList.id}
+                ingredients={ingredientsList}
+              />
             </div>
             <div className={styles.navBarButtons}>
               <Button
