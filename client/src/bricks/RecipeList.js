@@ -14,7 +14,7 @@ import Form from "react-bootstrap/Form";
 import Icon from "@mdi/react";
 import { mdiMagnify } from "@mdi/js";
 
-function RecipeList({ ingredientsList, recipeList }) {
+function RecipeList({ ingredientsList, recipeList, onComplete }) {
 
   const [viewType, setViewType] = useState("bigger"); // Stav pro zobrazení seznamu receptů (bigger, smaller, table)
 
@@ -69,6 +69,7 @@ function RecipeList({ ingredientsList, recipeList }) {
               <CreateOrEditRecipe
                 key={ingredientsList.id}
                 ingredients={ingredientsList}
+                onComplete={onComplete} // Předaná propsa s funkcí na aktualizaci seznamu receptů po přidání nového receptu
               />
             </div>
             <div className={styles.navBarButtons}>

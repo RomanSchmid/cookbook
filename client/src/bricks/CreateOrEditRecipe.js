@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 
-function CreateOrEditRecipe(props) {
+function CreateOrEditRecipe({ ingredients, onComplete }) {
     /* console.log(props.ingredients) */
     const defaultForm = { // Výchozí formát objektu receptu
         "name": "",
@@ -90,8 +90,11 @@ function CreateOrEditRecipe(props) {
                     onComplete(responseJson);
                 } */
 
-                handleCloseModal();
-                //refresh seznamu receptů
+                if (typeof onComplete === 'function') {
+                    onComplete(responseJson); // Předaná funkce z RecipeListPage -> RecipeList -> CreateOrEditRecipe, která přidá nový recept do seznamu receptů a aktualizuje ho
+                }
+
+                handleCloseModal(); // Uzavření modálního okna
             }
         });
         
@@ -147,7 +150,7 @@ function CreateOrEditRecipe(props) {
                                     required
                                 >   
                                     <option value=""></option>
-                                    {props.ingredients.map(opt => <option key={opt.id} value={opt.id}>{opt.name}</option>)}
+                                    {ingredients.map(opt => <option key={opt.id} value={opt.id}>{opt.name}</option>)}
                                 </Form.Select>
                                 <Form.Control.Feedback type="invalid">
                                     Zadejte ingredienci!

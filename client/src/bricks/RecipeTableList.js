@@ -24,7 +24,6 @@ function RecipeTableList(props) {
                           size={1} 
                           path={mdiPencilOutline} 
                           style={{ color: 'blue', cursor: 'pointer' }} 
-                          //onClick={() => handleAddGradeShow(grade)} 
                       /> 
                       </div>
                   </div>

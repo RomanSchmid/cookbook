@@ -18,6 +18,15 @@ function RecipeListPage() {
     state: "pending",
   });
 
+  const handleRecipeAdded = (recipe) => { // Funkce na aktualizaci seznamu receptů po přidání nového receptu
+    if (recipesLoadCall.state === "success") {
+      setRecipesLoadCall({
+        state: "success",
+        data: [...recipesLoadCall.data, recipe] // Přidání nového receptu do stávajícího seznamu receptů
+      });
+    }
+  }
+
   let [searchParams] = useSearchParams(); // React Hook pro čtení a upravování stringu v URL
   /* console.log(searchParams); */
 
@@ -72,13 +81,14 @@ function RecipeListPage() {
               <RecipeList 
                 recipeList={recipesLoadCall.data}
                 ingredientsList={ingredientsLoadCall.data}
+                onComplete={(recipe) => handleRecipeAdded(recipe)} // Propa s funkcí na aktualizaci seznamu receptů po přidání nového receptu
               />
             </div>
           </div>
         </>
       );
     } else if (recipesLoadCall.state === "error" || ingredientsLoadCall.state === "error" ) {
-        return (
+        return ( // Pokud fetch dat seznamu receptů nebo seznamu ingrediencí skončí chybou, zobrazí se na obrazovce uživatele "Error"
           <div>Error</div>
         );
     } else {
