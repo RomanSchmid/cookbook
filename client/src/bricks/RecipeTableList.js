@@ -1,10 +1,9 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
-import Icon from '@mdi/react';
-import { mdiPencilOutline } from "@mdi/js";
 import styles from "../css/recipe.module.css";
+import CreateOrEditRecipe from "./CreateOrEditRecipe";
 
-function RecipeTableList(props) {
+function RecipeTableList({ recipeList, ingredientsList }) {
     return (
       <Table>
         <thead>
@@ -13,18 +12,17 @@ function RecipeTableList(props) {
           </tr>
         </thead>
         <tbody>
-          {props.recipeList.map((recipe) => {
+          { recipeList.map((recipe) => {
             return (
               <tr key={recipe.id}>
                 <td>
                   <div className={styles.headingContainer}>
                     <div>{recipe.name}</div>
                     <div>
-                      <Icon 
-                          size={1} 
-                          path={mdiPencilOutline} 
-                          style={{ color: 'blue', cursor: 'pointer' }} 
-                      /> 
+                      <CreateOrEditRecipe
+                        ingredients={ingredientsList}
+                        recipe={recipe}
+                      />
                       </div>
                   </div>
                 </td>

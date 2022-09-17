@@ -1,9 +1,9 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import styles from "../css/recipe.module.css";
-//import NewRecipe from "./NewRecipe";
+import CreateOrEditRecipe from "./CreateOrEditRecipe";
 
-function RecipeBiggerDetail(props) {
+function RecipeBiggerDetail({ recipeList, ingredientsList}) {
     function getRecipeList(recipeList) {
         return recipeList.map((recipe) => {
             return (
@@ -18,9 +18,10 @@ function RecipeBiggerDetail(props) {
                                 {recipe.name}
                             </h2>
                             <div>
-{/*                                 <NewRecipe
+                                <CreateOrEditRecipe
+                                    ingredients={ingredientsList}
                                     recipe={recipe}
-                                /> */}
+                                />
                             </div>
                         </div>
                         <div>
@@ -42,7 +43,7 @@ function RecipeBiggerDetail(props) {
             );
         });
     }
-    return getRecipeList(props.recipeList);
+    return getRecipeList(recipeList);
 }
 
 export default RecipeBiggerDetail;

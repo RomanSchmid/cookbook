@@ -2,9 +2,12 @@
 //import { mdiClipboardListOutline } from "@mdi/js";
 import { useState } from 'react'
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
+import Icon from '@mdi/react';
+import { mdiPencilOutline } from "@mdi/js";
 
-function CreateOrEditRecipe({ ingredients, onComplete }) {
-    /* console.log(props.ingredients) */
+function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
+    /* console.log(ingredients)
+    console.log(recipe) */
     const defaultForm = { // Výchozí formát objektu receptu
         "name": "",
         "description": "",
@@ -106,7 +109,11 @@ function CreateOrEditRecipe({ ingredients, onComplete }) {
             <Modal show={isModalShown} onHide={handleCloseModal}>
                 <Form noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Vytvořit recept</Modal.Title>
+                        { recipe ? (
+                            <Modal.Title>Upravit recept</Modal.Title>
+                        ) : (
+                            <Modal.Title>Vytvořit recept</Modal.Title>
+                        )}                     
                     </Modal.Header>
                     <Modal.Body>
                         <Form.Group 
@@ -205,13 +212,22 @@ function CreateOrEditRecipe({ ingredients, onComplete }) {
                     </Modal.Footer>
                 </Form>
             </Modal>
-
-            <Button
+            { recipe ? (
+                <Icon 
+                size={1} 
+                path={mdiPencilOutline} 
+                style={{ color: 'blue', cursor: 'pointer' }} 
+                onClick={handleShowModal}
+                /> 
+            ) : (
+                <Button
                 variant="primary"
                 onClick={handleShowModal}
-            >
+                >
                 {"+"}
-            </Button>
+                </Button>
+            )}
+            
         </>
     )
   }

@@ -1,9 +1,10 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import styles from "../css/recipe.module.css";
+import CreateOrEditRecipe from "./CreateOrEditRecipe";
 //import Icon from '@mdi/react';
 
-function RecipeSmallerDetail(props) {
+function RecipeSmallerDetail({ recipeList, ingredientsList}) {
 
     function getRecipeList(recipeList) {
         return recipeList.map((recipe) => {
@@ -19,9 +20,10 @@ function RecipeSmallerDetail(props) {
                                     {recipe.name}
                                 </h2>
                                 <div>
-{/*                                     <NewRecipe
+                                    <CreateOrEditRecipe
+                                        ingredients={ingredientsList}
                                         recipe={recipe}
-                                    /> */}
+                                    />
                                 </div>
                             </div>
                         <div>
@@ -45,7 +47,7 @@ function RecipeSmallerDetail(props) {
             );
         });
     }
-    return getRecipeList(props.recipeList);
+    return getRecipeList(recipeList);
 }
 
 export default RecipeSmallerDetail;

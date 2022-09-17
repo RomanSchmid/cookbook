@@ -97,9 +97,9 @@ function RecipeList({ ingredientsList, recipeList, onComplete }) {
       </Navbar>
       <div className={styles.recipeList}>
         {/* Na zákldaě hodnoty viewType se zobrazí korespondující komponenta */}
-        {viewType === "bigger" ? <RecipeBiggerDetail recipeList={filteredRecipeList} /> : null}
-        {viewType === "smaller" ? <RecipeSmallerDetail recipeList={filteredRecipeList} /> : null}
-        {viewType === "table" ? <RecipeTableList recipeList={filteredRecipeList} /> : null}
+        {viewType === "bigger" ? <RecipeBiggerDetail recipeList={filteredRecipeList} ingredientsList={ingredientsList} /> : null}
+        {viewType === "smaller" ? <RecipeSmallerDetail recipeList={filteredRecipeList} ingredientsList={ingredientsList} /> : null}
+        {viewType === "table" ? <RecipeTableList recipeList={filteredRecipeList} ingredientsList={ingredientsList} /> : null}
       </div>
     </div>
   );
