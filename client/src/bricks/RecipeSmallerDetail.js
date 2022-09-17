@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import styles from "../css/recipe.module.css";
+//import Icon from '@mdi/react';
 
 function RecipeSmallerDetail(props) {
 
@@ -12,12 +13,17 @@ function RecipeSmallerDetail(props) {
                     key={recipe.id}
                 >
                     <Card.Body>
-                        <div>
-                            <h2 
-                                className={styles.heading}>
-                                {recipe.name}
-                            </h2>
-                        </div>
+                        <div className={styles.headingContainer}>
+                                <h2
+                                    className={styles.heading}>
+                                    {recipe.name}
+                                </h2>
+                                <div>
+{/*                                     <NewRecipe
+                                        recipe={recipe}
+                                    /> */}
+                                </div>
+                            </div>
                         <div>
                             <img 
                                 className={styles.image}

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+
 import cookbookLogo from "../images/cookbook-logo.svg";
+
 import RecipeList from '../bricks/RecipeList';
-//import recipeListData from "../recipes.json"
 
 const cookbook = {
   name: "CookBook"
@@ -13,84 +14,81 @@ function displayHeading(heading) {
 }
 
 function RecipeListPage() {
-  const [recipesLoadCall, setRecipesLoadCall] = useState({
+  const [recipesLoadCall, setRecipesLoadCall] = useState({ // React Hook, který ukládá aktuální stav načítání receptů
     state: "pending",
   });
 
-  let [searchParams] = useSearchParams();
+  let [searchParams] = useSearchParams(); // React Hook pro čtení a upravování stringu v URL
+  /* console.log(searchParams); */
 
-  const recipeId = searchParams.get("id");
+  let recipeId = searchParams.get("id"); //Uloží do konstanty recipeId hodnotu URL parametru "id", v současné chvíli vrací null
+  /* console.log(recipeId); */
 
-  useEffect(() => {
+  useEffect(() => { // React Hook pro volání serveru a stažení požadovaného receptu (pokud proměnná recipeId null, dojde ke stažení celého listu receptů)
+    /* console.log(recipeId); */
     fetch(`http://localhost:3000/recipe/list?id=${recipeId}`, {
       method: "GET",
     }).then(async (response) => {
-      const responseJson = await response.json();
+      const responseJson = await response.json(); // Uloží stažená data (recept / seznam receptů) do konstanty responseJson
       if (response.status >= 400) {
         setRecipesLoadCall({ state: "error", error: responseJson});
       } else {
         setRecipesLoadCall({ state: "success", data: responseJson});
       }
     });
-  }, [recipeId])
+  }, [recipeId]); // Volání severu probíhá po každé, když se změní hodnota proměnné recipeId
 
-  const [ingredientsCall, setIngredientsCall] = useState({
+  const [ingredientsLoadCall, setIngredientsCall] = useState({ // Ukládá aktuální stav načítání ingrediencí
     state: "pending",
   });
 
-  useEffect(() => {
+  useEffect(() => { // React Hook pro volání serveru a stažení seznamu receptů
     fetch("ingredient/list", {
       method: "GET",
     }).then(async (response) => {
-      const responseJson = await response.json();
+      const responseJson = await response.json(); // Uloží stažená data (seznam ingrediencí) do konstanty responseJson
       if (response.status >= 400) {
         setIngredientsCall({ state: "error", error: responseJson});
       } else {
         setIngredientsCall({ state: "success", data: responseJson});
       }
     });
-  }, []);
+  }, []); // Volání serveru probíhá pouze jednou
 
-  function getChild() {
-    switch (recipesLoadCall.state) {
-      case "pending":
-        /* console.log(recipesLoadCall.state) */
-        return (
-           <div>Pending</div>
-        );
-      case "success":
-        /* console.log(recipesLoadCall.state) */
-        return (
-          <>
-            <div className="container">
-              {displayHeading(cookbook.name)}
-              <p>Vivamus suscipit tortor <span>eget felis porttitor</span> volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              <img
-                className="logo"
-                src={cookbookLogo}
-                alt="Logo">
-              </img>
-              <div className="RecipeList">
-                <RecipeList 
-                  recipeList={recipesLoadCall.data}
-                  ingredientsList={ingredientsCall.data}
-                />
-              </div>
+  function getChild() { // Funkce pro zobrazení seznamu receptů na základě dat v recipesLoadCall
+    if (recipesLoadCall.state === "success" && ingredientsLoadCall.state === "success") { // Zobrazení proběhne jedině tehdy, když jsou úspěšně stažena data v recipesLoadCall a ingredientsLoadCall
+      return (
+        <>
+          <div className="container">
+            {displayHeading(cookbook.name)}
+            <p>Vivamus suscipit tortor <span>eget felis porttitor</span> volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <img
+              className="logo"
+              src={cookbookLogo}
+              alt="Logo">
+            </img>
+            <div className="RecipeList">
+              {/* Komponentě RecipeList jsou předány propsy s daty o seznamu receptů a seznamu ingrediencí */}
+              <RecipeList 
+                recipeList={recipesLoadCall.data}
+                ingredientsList={ingredientsLoadCall.data}
+              />
             </div>
-          </>
-        );
-      case "error":
-        /* console.log(recipesLoadCall.state) */
+          </div>
+        </>
+      );
+    } else if (recipesLoadCall.state === "error" || ingredientsLoadCall.state === "error" ) {
         return (
           <div>Error</div>
         );
-      default:
-        return null;
+    } else {
+        return (
+          <div>Pending</div>
+        );
     }
-  }
-    
+  }  
+
   return getChild();
-    
 }
-  
+
 export default RecipeListPage;

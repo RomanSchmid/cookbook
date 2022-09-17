@@ -1,6 +1,7 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import styles from "../css/recipe.module.css";
+//import NewRecipe from "./NewRecipe";
 
 function RecipeBiggerDetail(props) {
     function getRecipeList(recipeList) {
@@ -11,11 +12,16 @@ function RecipeBiggerDetail(props) {
                     key={recipe.id}
                 >
                     <Card.Body>
-                        <div>
-                            <h2 
+                        <div className={styles.headingContainer}>
+                            <h2
                                 className={styles.heading}>
                                 {recipe.name}
                             </h2>
+                            <div>
+{/*                                 <NewRecipe
+                                    recipe={recipe}
+                                /> */}
+                            </div>
                         </div>
                         <div>
                             <img 

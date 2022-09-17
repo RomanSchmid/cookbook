@@ -3,18 +3,12 @@
 import { useState } from 'react'
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 
-function NewRecipe(props) {
+function CreateOrEditRecipe(props) {
     /* console.log(props.ingredients) */
-    const [isModalShown, setShow] = useState(false);
-    const [validated, setValidated] = useState(false);
-/*     const [recipeAddCall, setRecipeAddCall] = useState({
-        state: "inactive"
-    });
-
-    const defaultForm = {
+    const defaultForm = { // Výchozí formát objektu receptu
         "name": "",
         "description": "",
-        "imgUri": "",
+        "imgUri": "https://cdn0.iconfinder.com/data/icons/citycons/150/Citycons_plate-256.png",
         "ingredients": [
             {
                 "id": "",
@@ -22,58 +16,85 @@ function NewRecipe(props) {
                 "unit": ""
             }
         ]
-    } */
-  
-    const handleShowModal = () => setShow(true);
-    const handleCloseModal = () => setShow(false);
-
-    const [formData, setFormData] = useState({
-        "name": "",
-        "description": "",
-        "imgUri": "",
-        "ingredients": [
-            {
-                "id": "",
-                "amount": "",
-                "unit": ""
-            }
-        ]
-    });
-
-    const setField = (name, val) => {
-        /* console.log(val) */
-
-        return setFormData((formData) => {
-            const newData = { ...formData };          
-
-            if (name === "id") {
-                newData["ingredients"][name] = val;
-            } else if (name === "amount") {
-                newData["ingredients"][name] = parseInt(val);
-            } else if (name === "unit") {
-                newData["ingredients"][name] = val;
-            } else {
-                newData[name] = val;
-            }
-            return newData
-        });
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const [isModalShown, setShow] = useState(false); // Stav, ve kterém se nachází zobrazení modálního okna (ve výchozím stavu je skryté)
+    const [validated, setValidated] = useState(false); // Stav, ve kterém se nachází formulář (zda je správně vyplněný a může být odeslán)
+    const [formData, setFormData] = useState(defaultForm); // Stav, ve kterém se nachází objekt receptu
+    const [recipeAddCall, setRecipeAddCall] = useState({ // Stav, ve kterém se nachází odesílání receptu na server
+        state: "inactive" // Výchozí stav je inactive
+    });
+  
+    const handleShowModal = () => setShow(true); // Funkce, která zobrazí modální okno
+    const handleCloseModal = () => { // Funkce, která proběhne při odeslání nového receptu nebo při stisknutí X na modálním okně
+        setShow(false); // Uzavření modálního okna
+        setFormData(defaultForm); // Po uzavření modálního okna, nastaví hodnoty nově vytvářeného objektu receptu na výchozí
+    }
+
+    const setIngredientsField = (name, val) => { // Funkce, která přenastavuje hodnoty v objektu receptu (formData), resp. pouze jeho property ingredients
+        /* console.log(val) */
+        /* console.log(name) */
+        const newData = { ...formData }; // Vytvoření kopie stávajícího objektu receptu (formData)
+        const newFirstItem = { ...formData.ingredients[0] }; // Vytvoření kopie stávajícího objektu ingrediencí
+        /* console.log(newFirstItem); */
+        newFirstItem[name] = val; // Přířazení hodnoty k příslušné property v nově vytvořené kopii objektu ingrediencí
+        /* console.log([newFirstItem]) */
+        newData.ingredients = [newFirstItem] // Přiřazení pole objektů (1 objekt ingrediencí) k ingredients property v nově vytvořené kopii newData
+
+        return setFormData(newData); // Přepsání hodnot objektu ve formData hodnotami z objektu newData
+    }
+
+    const setField = (name, val) => { // Funkce, která přenastavuje hodnoty v objektu receptu (formData)
+        /* console.log(val) */
+        /* console.log(name) */
+        const newData = { ...formData }; // Vytvoření kopie stávajícího objektu receptu (formData)
+        newData[name] = val; // Přířazení hodnoty k příslušné property v nově vytvořené kopie newData
+
+        return setFormData(newData); // Přepsání hodnot objektu ve formData hodnotami z objektu newData
+    }
+
+    const payload = { // Objekt nově vytvořeného receptu, který bude odeslán na server
+        ...formData,
+    }
+
+    const handleSubmit = async (e) => { // Funkce pro odeslání nového receptu na server
+        e.preventDefault(); // Zabránění refreshe stránky po stistknutí odesílacího tlačítka
         /* e.stopPropagation(); */
-        const form = e.currentTarget; 
-        /* console.log(form.checkValidity()) */
 
-        const payload = {
-            ...formData,
-        }
+        /* console.log(e.currentTarget); */
+        const form = e.currentTarget; // uložení elementu Form do konstanty form
 
-        if (!form.checkValidity()) {
+        /* console.log(form.checkValidity()); */
+        if (!form.checkValidity()) { // Ověření, že všechny inputy byly vyplněny správně a formulář je možno odeslat (vrací boolean)
             setValidated(true);
-            return;
+            /* return; */
         }
 
+        setRecipeAddCall({ state: "pending" }); // Nastavení odesílání receptu na server do stavu pending
+
+        fetch("/recipe/create", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload)
+          }).then(async (response) => {
+            const responseJson = await response.json(); // Uložení odesílaného objektu na server
+            /* console.log(responseJson); */
+            if (response.status >= 400) {
+                setRecipeAddCall({ state: "error", error: responseJson}); // Nastavení odesílání receptu na server do stavu error
+            } else {
+                setRecipeAddCall({ state: "success", data: responseJson}); // Nastavení odesílání receptu na server do stavu success
+
+                /* if (typeof props.onComplete === 'function') {
+                    onComplete(responseJson);
+                } */
+
+                handleCloseModal();
+                //refresh seznamu receptů
+            }
+        });
+        
         console.log(payload);
     }
 
@@ -122,7 +143,7 @@ function NewRecipe(props) {
                             <Form.Group as={Col} className="mb-3">
                                 <Form.Label>Ingredience</Form.Label>
                                 <Form.Select
-                                    onChange={(e) => setField("id", e.target.value)}
+                                    onChange={(e) => setIngredientsField("id", e.target.value)}
                                     required
                                 >   
                                     <option value=""></option>
@@ -141,7 +162,7 @@ function NewRecipe(props) {
                                         max={1000}
                                         rows={1}
                                         placeholder="0"
-                                        onChange={(e) => setField("amount", e.target.value)}
+                                        onChange={(e) => setIngredientsField("amount", parseInt(e.target.value))}
                                         required
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -152,7 +173,7 @@ function NewRecipe(props) {
                             <Form.Group as={Col} className="mb-3">
                                 <Form.Label>Jednotka</Form.Label>
                                 <Form.Select
-                                    onChange={(e) => setField("unit", e.target.value)}
+                                    onChange={(e) => setIngredientsField("unit", e.target.value)}
                                     required
                                 >
                                     <option></option>
@@ -167,6 +188,11 @@ function NewRecipe(props) {
                         </Row>
                     </Modal.Body>
                     <Modal.Footer>
+                        <div>
+                            { recipeAddCall.state === 'error' && 
+                                <div className="text-danger">Error: {recipeAddCall.error.errorMessage}</div> 
+                            }
+                        </div>
                         <Button 
                             variant="primary" 
                             type="submit"
@@ -187,4 +213,4 @@ function NewRecipe(props) {
     )
   }
   
-export default NewRecipe;
+export default CreateOrEditRecipe;

@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from "react";
+
 import RecipeBiggerDetail from "./RecipeBiggerDetail";
 import RecipeSmallerDetail from "./RecipeSmallerDetail";
 import RecipeTableList from "./RecipeTableList";
+import CreateOrEditRecipe from "./CreateOrEditRecipe";
+
 import styles from "../css/recipe.module.css";
-import NewRecipe from "./NewRecipe";
 
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
@@ -12,12 +14,13 @@ import Form from "react-bootstrap/Form";
 import Icon from "@mdi/react";
 import { mdiMagnify } from "@mdi/js";
 
-function RecipeList({ ingredientsList, recipeList}) {
+function RecipeList({ ingredientsList, recipeList }) {
 
-  const [viewType, setViewType] = useState("bigger");
-  const [searchBy, setSearchBy] = useState("");
+  const [viewType, setViewType] = useState("bigger"); // Stav pro zobrazení seznamu receptů (bigger, smaller, table)
 
-  const filteredRecipeList = useMemo(() => {
+  const [searchBy, setSearchBy] = useState(""); // Stav pro vyhledávání receptů
+
+  const filteredRecipeList = useMemo(() => { // React Hook pro zapamatování hodnoty (filtrovaného seznamu receptů)
     return recipeList.filter((item) => {
       return (
         item.name
@@ -26,15 +29,15 @@ function RecipeList({ ingredientsList, recipeList}) {
         item.description.toLocaleLowerCase().includes(searchBy.toLocaleLowerCase())
       );
     });
-  }, [searchBy, recipeList]);
+  }, [searchBy, recipeList]); // Memo Hook se spustí pouze pokud se změní hodnota searchBy nebo recipeList
 
-  function handleSearch(event) {
+  function handleSearch(event) { // Funkce, která se spustí při stisknutí tlačítka vyhledat
     event.preventDefault();
     setSearchBy(event.target["searchInput"].value);
   }
 
-  function handleSearchDelete(event) {
-    if (!event.target.value) setSearchBy("");
+  function handleSearchDelete(event) { // Funkce, která se bude spouštět při změně hodnoty vstupu pro vyhledávání
+    if (!event.target.value) setSearchBy(""); // Pokud na vstupu nebude hodnota (uživatel stiskne X), bude vyhledávání zrušeno
   }
 
   return (
@@ -62,7 +65,8 @@ function RecipeList({ ingredientsList, recipeList}) {
               </Form>
             </div>
             <div>
-              <NewRecipe
+              {/* Komponentě CreateOrEditRecipe je předán seznam ingrediencí a klíč (id ingredience) */}
+              <CreateOrEditRecipe
                 key={ingredientsList.id}
                 ingredients={ingredientsList}
               />
@@ -91,6 +95,7 @@ function RecipeList({ ingredientsList, recipeList}) {
         </div>
       </Navbar>
       <div className={styles.recipeList}>
+        {/* Na zákldaě hodnoty viewType se zobrazí korespondující komponenta */}
         {viewType === "bigger" ? <RecipeBiggerDetail recipeList={filteredRecipeList} /> : null}
         {viewType === "smaller" ? <RecipeSmallerDetail recipeList={filteredRecipeList} /> : null}
         {viewType === "table" ? <RecipeTableList recipeList={filteredRecipeList} /> : null}
