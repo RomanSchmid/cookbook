@@ -20,10 +20,15 @@ function RecipeListPage() {
 
   const handleRecipeAdded = (recipe) => { // Funkce na aktualizaci seznamu receptů po přidání nového receptu
     if (recipesLoadCall.state === "success") {
-      /* console.log(recipesLoadCall.data) */
+      let recipeList = [...recipesLoadCall.data]; // Kopie seznamu receptů
+
+      if (recipe.id) {
+        recipeList = recipeList.filter((rec) => rec.id !== recipe.id); // Odfiltrování editovaného receptu ze seznamu receptů (aby nedošlo k zobrazení duplikátu)
+      }
+
       setRecipesLoadCall({
         state: "success",
-        data: [...recipesLoadCall.data, recipe] // Přidání nového receptu do stávajícího seznamu receptů
+        data: [...recipeList, recipe] // Přidání nového/editovaného receptu do seznamu receptů
       });
     }
   }

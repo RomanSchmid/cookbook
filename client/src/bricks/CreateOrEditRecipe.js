@@ -6,8 +6,6 @@ import Icon from '@mdi/react';
 import { mdiPencilOutline } from "@mdi/js";
 
 function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
-    /* console.log(ingredients)
-    console.log(recipe) */
     const defaultForm = { // Výchozí formát objektu receptu
         name: "",
         description: "",
@@ -44,8 +42,6 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
             })
         }
     }, [recipe])
-
-    /* console.log(formData); */
   
     const handleShowModal = () => setShow(true); // Funkce, která zobrazí modální okno
     const handleCloseModal = () => { // Funkce, která proběhne při odeslání nového receptu nebo při stisknutí X na modálním okně
@@ -54,21 +50,15 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
     }
 
     const setIngredientsField = (name, val) => { // Funkce, která přenastavuje hodnoty v objektu receptu (formData), resp. pouze jeho property ingredients
-        /* console.log(val) */
-        /* console.log(name) */
         const newData = { ...formData }; // Vytvoření kopie stávajícího objektu receptu (formData)
         const newFirstItem = { ...formData.ingredients[0] }; // Vytvoření kopie stávajícího objektu ingrediencí
-        /* console.log(newFirstItem); */
         newFirstItem[name] = val; // Přířazení hodnoty k příslušné property v nově vytvořené kopii objektu ingrediencí
-        /* console.log([newFirstItem]) */
         newData.ingredients = [newFirstItem] // Přiřazení pole objektů (1 objekt ingrediencí) k ingredients property v nově vytvořené kopii newData
 
         return setFormData(newData); // Přepsání hodnot objektu ve formData hodnotami z objektu newData
     }
 
     const setField = (name, val) => { // Funkce, která přenastavuje hodnoty v objektu receptu (formData)
-        /* console.log(val) */
-        /* console.log(name) */
         const newData = { ...formData }; // Vytvoření kopie stávajícího objektu receptu (formData)
         newData[name] = val; // Přířazení hodnoty k příslušné property v nově vytvořené kopie newData
 
@@ -81,21 +71,16 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
     }
 
     const handleSubmit = async (e) => { // Funkce pro odeslání nového receptu na server
-        /* console.log(e) */
         e.preventDefault(); // Zabránění refreshe stránky po stistknutí odesílacího tlačítka
         /* e.stopPropagation(); */
 
-        /* console.log(e.currentTarget); */
         const form = e.currentTarget; // uložení elementu Form do konstanty form
 
-        /* console.log(form.checkValidity()); */
         if (!form.checkValidity()) { // Ověření, že všechny inputy byly vyplněny správně a formulář je možno odeslat (vrací boolean)
             setValidated(true);
-            /* return; */
         }
 
         setRecipeAddCall({ state: "pending" }); // Nastavení odesílání receptu na server do stavu pending
-        /* console.log(payload); */
         fetch(`/recipe/${recipe ? 'update' : 'create'}`, {
             method: "POST",
             headers: {
@@ -104,7 +89,6 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
             body: JSON.stringify(payload) // Odesílaný recept na server
           }).then(async (response) => {
             const responseJson = await response.json(); // Uložený recept na serveru s přiděleným id
-            /* console.log(responseJson); */
             if (response.status >= 400) {
                 setRecipeAddCall({ state: "error", error: responseJson}); // Nastavení odesílání receptu na server do stavu error
             } else {
@@ -236,7 +220,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                 <Icon 
                 size={1} 
                 path={mdiPencilOutline} 
-                style={{ color: 'blue', cursor: 'pointer' }} 
+                style={{ color: 'rgb(108, 99, 255)', cursor: 'pointer' }} 
                 onClick={handleShowModal}
                 /> 
             ) : (

@@ -3,7 +3,7 @@ import Card from "react-bootstrap/Card";
 import styles from "../css/recipe.module.css";
 import CreateOrEditRecipe from "./CreateOrEditRecipe";
 
-function RecipeBiggerDetail({ recipeList, ingredientsList}) {
+function RecipeBiggerDetail({ recipeList, ingredientsList, onComplete}) {
     function getRecipeList(recipeList) {
         return recipeList.map((recipe) => {
             return (
@@ -21,6 +21,7 @@ function RecipeBiggerDetail({ recipeList, ingredientsList}) {
                                 <CreateOrEditRecipe
                                     ingredients={ingredientsList}
                                     recipe={recipe}
+                                    onComplete={onComplete}
                                 />
                             </div>
                         </div>

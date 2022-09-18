@@ -1,10 +1,11 @@
 import React from "react";
-import Card from "react-bootstrap/Card";
-import styles from "../css/recipe.module.css";
-import CreateOrEditRecipe from "./CreateOrEditRecipe";
-//import Icon from '@mdi/react';
 
-function RecipeSmallerDetail({ recipeList, ingredientsList}) {
+import Card from "react-bootstrap/Card";
+import styles from "../css/RecipeSmallerDetail.module.css";
+
+import CreateOrEditRecipe from "./CreateOrEditRecipe";
+
+function RecipeSmallerDetail({ recipeList, ingredientsList, onComplete}) {
 
     function getRecipeList(recipeList) {
         return recipeList.map((recipe) => {
@@ -23,6 +24,7 @@ function RecipeSmallerDetail({ recipeList, ingredientsList}) {
                                     <CreateOrEditRecipe
                                         ingredients={ingredientsList}
                                         recipe={recipe}
+                                        onComplete={onComplete}
                                     />
                                 </div>
                             </div>
@@ -41,6 +43,16 @@ function RecipeSmallerDetail({ recipeList, ingredientsList}) {
                                 className={styles.paragraph}>
                                 {recipe.description}
                             </p>
+                        </div>
+                        <div className={styles.ingredientsList}>
+                            <ul>
+                                { 
+                                    recipe.ingredients.slice(0, 4).map((ing) => {
+                                        let ingredients = ingredientsList.find((e) => e.id === ing.id)
+                                        return <li key={ingredients.id}>{ingredients.name}</li>
+                                    })
+                                }
+                            </ul>
                         </div>
                     </Card.Body>
                 </Card>
