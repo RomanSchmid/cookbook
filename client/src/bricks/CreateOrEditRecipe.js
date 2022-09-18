@@ -9,7 +9,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
     const defaultForm = { // Výchozí formát objektu receptu
         name: "",
         description: "",
-        imgUri: "https://cdn0.iconfinder.com/data/icons/citycons/150/Citycons_plate-256.png",
+        imgUri: "https://cdn4.iconfinder.com/data/icons/food-and-equipment-outline/32/dish-256.png",
         ingredients: [
             {
                 id: "",
@@ -31,7 +31,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
             setFormData({
                 name: recipe.name,
                 description: recipe.description,
-                imgUri: "https://cdn0.iconfinder.com/data/icons/citycons/150/Citycons_plate-256.png",
+                imgUri: "https://cdn4.iconfinder.com/data/icons/food-and-equipment-outline/32/dish-256.png",
                 ingredients: [
                     {
                         id: recipe.ingredients[0].id,
@@ -220,7 +220,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                 <Icon 
                 size={1} 
                 path={mdiPencilOutline} 
-                style={{ color: 'rgb(108, 99, 255)', cursor: 'pointer' }} 
+                style={{ color: 'rgb(11, 94, 215)', cursor: 'pointer' }} 
                 onClick={handleShowModal}
                 /> 
             ) : (

@@ -55,13 +55,13 @@ function RecipeList({ ingredientsList, recipeList, onComplete }) {
                   aria-label="Search"
                   onChange={handleSearchDelete}
                 />
-                <Button
+                {<Button  
                   style={{ margin: "0 5px" }}
                   variant="outline-primary"
                   type="submit"
                 >
-                  <Icon size={1} path={mdiMagnify} />
-                </Button>
+                  {<Icon size={1} path={mdiMagnify} />} 
+                </Button>}
               </Form>
             </div>
             <div>

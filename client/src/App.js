@@ -9,7 +9,6 @@ import { mdiLoading, mdiAlertOctagonOutline } from "@mdi/js";
 import './App.css';
 import { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-//import recipeListData from "./recipes.json"
 
 function App() {
   const [listRecipesCall, setListRecipesCall] = useState({
@@ -31,7 +30,6 @@ function App() {
   }, []);
 
   function getRecipesListDropdown() {
-    /* console.log(listRecipesCall); */
     switch (listRecipesCall.state) {
       case "pending":
         return (
@@ -41,7 +39,7 @@ function App() {
         );
       case "success":
         return (
-          <NavDropdown title="Select Recipe" id="navbarScrollingDropdown">
+          <NavDropdown title="Vyber recept" id="navbarScrollingDropdown">
             {listRecipesCall.data.map((recipe) => {
               return (
                 <NavDropdown.Item

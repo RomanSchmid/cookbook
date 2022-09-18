@@ -5,12 +5,8 @@ import cookbookLogo from "../images/cookbook-logo.svg";
 
 import RecipeList from '../bricks/RecipeList';
 
-const cookbook = {
-  name: "CookBook"
-};
-
-function displayHeading(heading) {
-  return <h1 className="heading">My <span>{heading}</span></h1>
+function displayHeading() {
+  return <h1 className="heading">Cook<span>Book</span></h1>
 }
 
 function RecipeListPage() {
@@ -34,13 +30,10 @@ function RecipeListPage() {
   }
 
   let [searchParams] = useSearchParams(); // React Hook pro čtení a upravování stringu v URL
-  /* console.log(searchParams); */
 
   let recipeId = searchParams.get("id"); //Uloží do konstanty recipeId hodnotu URL parametru "id", v současné chvíli vrací null
-  /* console.log(recipeId); */
 
   useEffect(() => { // React Hook pro volání serveru a stažení požadovaného receptu (pokud proměnná recipeId null, dojde ke stažení celého listu receptů)
-    /* console.log(recipeId); */
     fetch(`http://localhost:3000/recipe/list?id=${recipeId}`, {
       method: "GET",
     }).then(async (response) => {
@@ -75,7 +68,7 @@ function RecipeListPage() {
       return (
         <>
           <div className="container">
-            {displayHeading(cookbook.name)}
+            {displayHeading()}
             <p>Vivamus suscipit tortor <span>eget felis porttitor</span> volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
             <img
               className="logo"

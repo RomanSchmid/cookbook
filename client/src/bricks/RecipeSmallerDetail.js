@@ -1,7 +1,7 @@
 import React from "react";
 
 import Card from "react-bootstrap/Card";
-import styles from "../css/RecipeSmallerDetail.module.css";
+import styles from "../css/recipe.module.css";
 
 import CreateOrEditRecipe from "./CreateOrEditRecipe";
 
