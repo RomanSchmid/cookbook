@@ -1,5 +1,3 @@
-//import Icon from "@mdi/react";
-//import { mdiClipboardListOutline } from "@mdi/js";
 import { useEffect, useState } from 'react'
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import Icon from '@mdi/react';
