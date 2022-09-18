@@ -20,6 +20,7 @@ function RecipeListPage() {
 
   const handleRecipeAdded = (recipe) => { // Funkce na aktualizaci seznamu receptů po přidání nového receptu
     if (recipesLoadCall.state === "success") {
+      /* console.log(recipesLoadCall.data) */
       setRecipesLoadCall({
         state: "success",
         data: [...recipesLoadCall.data, recipe] // Přidání nového receptu do stávajícího seznamu receptů

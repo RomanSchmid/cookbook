@@ -1,6 +1,6 @@
 //import Icon from "@mdi/react";
 //import { mdiClipboardListOutline } from "@mdi/js";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import Icon from '@mdi/react';
 import { mdiPencilOutline } from "@mdi/js";
@@ -9,14 +9,14 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
     /* console.log(ingredients)
     console.log(recipe) */
     const defaultForm = { // Výchozí formát objektu receptu
-        "name": "",
-        "description": "",
-        "imgUri": "https://cdn0.iconfinder.com/data/icons/citycons/150/Citycons_plate-256.png",
-        "ingredients": [
+        name: "",
+        description: "",
+        imgUri: "https://cdn0.iconfinder.com/data/icons/citycons/150/Citycons_plate-256.png",
+        ingredients: [
             {
-                "id": "",
-                "amount": "",
-                "unit": ""
+                id: "",
+                amount: "",
+                unit: ""
             }
         ]
     }
@@ -27,6 +27,25 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
     const [recipeAddCall, setRecipeAddCall] = useState({ // Stav, ve kterém se nachází odesílání receptu na server
         state: "inactive" // Výchozí stav je inactive
     });
+
+    useEffect(() => {
+        if (recipe) {
+            setFormData({
+                name: recipe.name,
+                description: recipe.description,
+                imgUri: "https://cdn0.iconfinder.com/data/icons/citycons/150/Citycons_plate-256.png",
+                ingredients: [
+                    {
+                        id: recipe.ingredients[0].id,
+                        amount: recipe.ingredients[0].amount,
+                        unit: recipe.ingredients[0].unit
+                    }
+                ]
+            })
+        }
+    }, [recipe])
+
+    /* console.log(formData); */
   
     const handleShowModal = () => setShow(true); // Funkce, která zobrazí modální okno
     const handleCloseModal = () => { // Funkce, která proběhne při odeslání nového receptu nebo při stisknutí X na modálním okně
@@ -56,11 +75,13 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
         return setFormData(newData); // Přepsání hodnot objektu ve formData hodnotami z objektu newData
     }
 
-    const payload = { // Objekt nově vytvořeného receptu, který bude odeslán na server
+    const payload = { // Objekt nově vytvořeného nebo upravovaného receptu, který bude odeslán na server
         ...formData,
+        id: recipe ? recipe.id : null // Pokud se recept upravuje, je do objektu přidána property id
     }
 
     const handleSubmit = async (e) => { // Funkce pro odeslání nového receptu na server
+        /* console.log(e) */
         e.preventDefault(); // Zabránění refreshe stránky po stistknutí odesílacího tlačítka
         /* e.stopPropagation(); */
 
@@ -74,24 +95,20 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
         }
 
         setRecipeAddCall({ state: "pending" }); // Nastavení odesílání receptu na server do stavu pending
-
-        fetch("/recipe/create", {
+        /* console.log(payload); */
+        fetch(`/recipe/${recipe ? 'update' : 'create'}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload) // Odesílaný recept na server
           }).then(async (response) => {
-            const responseJson = await response.json(); // Uložení odesílaného objektu na server
+            const responseJson = await response.json(); // Uložený recept na serveru s přiděleným id
             /* console.log(responseJson); */
             if (response.status >= 400) {
                 setRecipeAddCall({ state: "error", error: responseJson}); // Nastavení odesílání receptu na server do stavu error
             } else {
                 setRecipeAddCall({ state: "success", data: responseJson}); // Nastavení odesílání receptu na server do stavu success
-
-                /* if (typeof props.onComplete === 'function') {
-                    onComplete(responseJson);
-                } */
 
                 if (typeof onComplete === 'function') {
                     onComplete(responseJson); // Předaná funkce z RecipeListPage -> RecipeList -> CreateOrEditRecipe, která přidá nový recept do seznamu receptů a aktualizuje ho
@@ -100,8 +117,6 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                 handleCloseModal(); // Uzavření modálního okna
             }
         });
-        
-        console.log(payload);
     }
 
     return (
@@ -123,6 +138,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                             <Form.Label>Název</Form.Label>
                             <Form.Control 
                                 type="text"
+                                value={formData.name}
                                 onChange={(e) => setField("name", e.target.value)}
                                 maxLength={20}
                                 required
@@ -139,6 +155,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                             <Form.Label>Postup</Form.Label>
                             <Form.Control 
                                 as="textarea"
+                                value={formData.description}
                                 rows={5}
                                 onChange={(e) => setField("description", e.target.value)}
                                 required
@@ -153,6 +170,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                             <Form.Group as={Col} className="mb-3">
                                 <Form.Label>Ingredience</Form.Label>
                                 <Form.Select
+                                    value={formData.ingredients[0].id}
                                     onChange={(e) => setIngredientsField("id", e.target.value)}
                                     required
                                 >   
@@ -168,6 +186,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                                 <Form.Label>Množství</Form.Label>
                                 <Form.Control 
                                         type="number"
+                                        value={formData.ingredients[0].amount}
                                         min={0}
                                         max={1000}
                                         rows={1}
@@ -183,6 +202,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                             <Form.Group as={Col} className="mb-3">
                                 <Form.Label>Jednotka</Form.Label>
                                 <Form.Select
+                                    value={formData.ingredients[0].unit}
                                     onChange={(e) => setIngredientsField("unit", e.target.value)}
                                     required
                                 >
@@ -207,7 +227,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                             variant="primary" 
                             type="submit"
                         >
-                            + Vytvořit
+                            { recipe ? "Upravit" : "Vytvořit" }
                         </Button>
                     </Modal.Footer>
                 </Form>
