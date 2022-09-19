@@ -1,12 +1,13 @@
 import { useEffect, useState, useContext } from 'react'
-import { Modal, Form, Button, Row, Col } from "react-bootstrap";
+import { Modal, Form, Button, Row, Col, Alert } from "react-bootstrap";
 
 import UserContext from "../UserProvider";
 
 import Icon from '@mdi/react';
 import { mdiPencilOutline } from "@mdi/js";
+import DeleteRecipe from './DeleteRecipe';
 
-function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
+function CreateOrEditRecipe({ ingredients, onComplete, recipe, onDelete }) {
     const { isAuthorized } = useContext(UserContext);
 
     const defaultForm = { // Výchozí formát objektu receptu
@@ -28,6 +29,7 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
     const [recipeAddCall, setRecipeAddCall] = useState({ // Stav, ve kterém se nachází odesílání receptu na server
         state: "inactive" // Výchozí stav je inactive
     });
+    const [deleteRecipeError, setDeleteRecipeError] = useState("");
 
     useEffect(() => {
         if (recipe) {
@@ -118,6 +120,11 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                         )}                     
                     </Modal.Header>
                     <Modal.Body>
+                        {deleteRecipeError && // Pokud mazání známky neproběhne úspěšně, zobrazí se alert s patřičným errorem
+                            <Alert variant='danger'>
+                                Error: {deleteRecipeError}
+                            </Alert>
+                        }
                         <Form.Group 
                             className="mb-3" 
                             controlId="nazev"
@@ -221,12 +228,19 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
             </Modal>
             {isAuthorized ? (
                  recipe ? (
-                    <Icon 
-                    size={1} 
-                    path={mdiPencilOutline} 
-                    style={{ color: 'rgb(11, 94, 215)', cursor: 'pointer' }} 
-                    onClick={handleShowModal}
-                    /> 
+                    <div style={{display: "flex", alignItems: "center"}}>
+                        <Icon 
+                        size={1} 
+                        path={mdiPencilOutline} 
+                        style={{ color: 'rgb(11, 94, 215)', cursor: 'pointer' }} 
+                        onClick={handleShowModal}
+                        /> 
+                        <DeleteRecipe
+                            recipe={recipe}
+                            onError={(error) => setDeleteRecipeError(error)} // Propsa, která bude zachycovat případný error při mazání známky
+                            onDelete={onDelete}
+                        ></DeleteRecipe>
+                    </div>
                 ) : (
                     <Button
                     variant="primary"

@@ -14,7 +14,7 @@ import Form from "react-bootstrap/Form";
 import Icon from "@mdi/react";
 import { mdiMagnify } from "@mdi/js";
 
-function RecipeList({ ingredientsList, recipeList, onComplete }) {
+function RecipeList({ ingredientsList, recipeList, onComplete, onDelete }) {
 
   const [viewType, setViewType] = useState("bigger"); // Stav pro zobrazení seznamu receptů (bigger, smaller, table)
 
@@ -70,6 +70,7 @@ function RecipeList({ ingredientsList, recipeList, onComplete }) {
                 key={ingredientsList.id}
                 ingredients={ingredientsList}
                 onComplete={onComplete} // Předaná propsa s funkcí na aktualizaci seznamu receptů po přidání nového receptu
+                onDelete={onDelete}
               />
             </div>
             <div className={styles.navBarButtons}>
@@ -97,9 +98,9 @@ function RecipeList({ ingredientsList, recipeList, onComplete }) {
       </Navbar>
       <div className={styles.recipeList}>
         {/* Na zákldaě hodnoty viewType se zobrazí korespondující komponenta */}
-        {viewType === "bigger" ? <RecipeBiggerDetail recipeList={filteredRecipeList} ingredientsList={ingredientsList} onComplete={onComplete} /> : null}
-        {viewType === "smaller" ? <RecipeSmallerDetail recipeList={filteredRecipeList} ingredientsList={ingredientsList} onComplete={onComplete} /> : null}
-        {viewType === "table" ? <RecipeTableList recipeList={filteredRecipeList} ingredientsList={ingredientsList} onComplete={onComplete} /> : null}
+        {viewType === "bigger" ? <RecipeBiggerDetail recipeList={filteredRecipeList} ingredientsList={ingredientsList} onComplete={onComplete} onDelete={onDelete}/> : null}
+        {viewType === "smaller" ? <RecipeSmallerDetail recipeList={filteredRecipeList} ingredientsList={ingredientsList} onComplete={onComplete} onDelete={onDelete}/> : null}
+        {viewType === "table" ? <RecipeTableList recipeList={filteredRecipeList} ingredientsList={ingredientsList} onComplete={onComplete} onDelete={onDelete} /> : null}
       </div>
     </div>
   );

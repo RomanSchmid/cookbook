@@ -5,7 +5,7 @@ import styles from "../css/recipe.module.css";
 
 import CreateOrEditRecipe from "./CreateOrEditRecipe";
 
-function RecipeSmallerDetail({ recipeList, ingredientsList, onComplete}) {
+function RecipeSmallerDetail({ recipeList, ingredientsList, onComplete, onDelete}) {
 
     function getRecipeList(recipeList) {
         return recipeList.map((recipe) => {
@@ -25,6 +25,7 @@ function RecipeSmallerDetail({ recipeList, ingredientsList, onComplete}) {
                                         ingredients={ingredientsList}
                                         recipe={recipe}
                                         onComplete={onComplete}
+                                        onDelete={onDelete}
                                     />
                                 </div>
                             </div>

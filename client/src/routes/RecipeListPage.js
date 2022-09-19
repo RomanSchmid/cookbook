@@ -29,6 +29,15 @@ function RecipeListPage() {
     }
   }
 
+  const handleRecipeDeleted = (recipeId) => {
+    if (recipesLoadCall.state === "success") {
+      setRecipesLoadCall({
+        state: "success",
+        data: recipesLoadCall.data.filter((r) => r.id !== recipeId)
+      });
+    }
+  }
+
   let [searchParams] = useSearchParams(); // React Hook pro čtení a upravování stringu v URL
 
   let recipeId = searchParams.get("id"); //Uloží do konstanty recipeId hodnotu URL parametru "id", v současné chvíli vrací null
@@ -80,7 +89,8 @@ function RecipeListPage() {
               <RecipeList 
                 recipeList={recipesLoadCall.data}
                 ingredientsList={ingredientsLoadCall.data}
-                onComplete={(recipe) => handleRecipeAdded(recipe)} // Propa s funkcí na aktualizaci seznamu receptů po přidání nového receptu
+                onComplete={(recipe) => handleRecipeAdded(recipe)} // Propsa s funkcí na aktualizaci seznamu receptů po přidání nového receptu
+                onDelete={(recipeId) => handleRecipeDeleted(recipeId)} // Propsa s funkcí na aktualizaci seznamu receptů po smazání receptu
               />
             </div>
           </div>

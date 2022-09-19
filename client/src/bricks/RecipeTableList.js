@@ -3,7 +3,7 @@ import Table from "react-bootstrap/Table";
 import styles from "../css/recipe.module.css";
 import CreateOrEditRecipe from "./CreateOrEditRecipe";
 
-function RecipeTableList({ recipeList, ingredientsList, onComplete }) {
+function RecipeTableList({ recipeList, ingredientsList, onComplete, onDelete }) {
     return (
       <Table>
         <thead>
@@ -23,6 +23,7 @@ function RecipeTableList({ recipeList, ingredientsList, onComplete }) {
                         ingredients={ingredientsList}
                         recipe={recipe}
                         onComplete={onComplete}
+                        onDelete={onDelete}
                       />
                       </div>
                   </div>
