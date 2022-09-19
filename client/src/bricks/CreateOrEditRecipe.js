@@ -1,9 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
+
+import UserContext from "../UserProvider";
+
 import Icon from '@mdi/react';
 import { mdiPencilOutline } from "@mdi/js";
 
 function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
+    const { isAuthorized } = useContext(UserContext);
+
     const defaultForm = { // Výchozí formát objektu receptu
         name: "",
         description: "",
@@ -214,22 +219,24 @@ function CreateOrEditRecipe({ ingredients, onComplete, recipe }) {
                     </Modal.Footer>
                 </Form>
             </Modal>
-            { recipe ? (
-                <Icon 
-                size={1} 
-                path={mdiPencilOutline} 
-                style={{ color: 'rgb(11, 94, 215)', cursor: 'pointer' }} 
-                onClick={handleShowModal}
-                /> 
-            ) : (
-                <Button
-                variant="primary"
-                onClick={handleShowModal}
-                >
-                {"+"}
-                </Button>
-            )}
-            
+            {isAuthorized ? (
+                 recipe ? (
+                    <Icon 
+                    size={1} 
+                    path={mdiPencilOutline} 
+                    style={{ color: 'rgb(11, 94, 215)', cursor: 'pointer' }} 
+                    onClick={handleShowModal}
+                    /> 
+                ) : (
+                    <Button
+                    variant="primary"
+                    onClick={handleShowModal}
+                    >
+                    {"+"}
+                    </Button>
+                )
+                ) : (null)
+            }
         </>
     )
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { UserProvider } from './UserProvider';
 
 import './index.css';
 
@@ -13,15 +14,17 @@ import RecipeDetailPage from "./routes/RecipeDetailPage";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route path="home" element={<HomePage />} />
-          <Route path="recipeDetail" element={<RecipeDetailPage />} />
-          <Route path="recipeList" element={<RecipeListPage />} />
-          <Route path="ingredientList" element={<IngredientListPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route path="home" element={<HomePage />} />
+            <Route path="recipeDetail" element={<RecipeDetailPage />} />
+            <Route path="recipeList" element={<RecipeListPage />} />
+            <Route path="ingredientList" element={<IngredientListPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   </>
 );
