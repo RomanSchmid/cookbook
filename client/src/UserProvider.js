@@ -5,8 +5,13 @@ const UserContext = createContext();
 export function UserProvider({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(true);
 
+    const toggleIsAuthorized = (auth) => {
+        setIsAuthorized(auth)
+    }
+
     const value = {
-        isAuthorized
+        isAuthorized,
+        toggleIsAuthorized
     }
 
     return (

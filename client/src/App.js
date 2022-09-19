@@ -7,10 +7,12 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import Icon from "@mdi/react";
 import { mdiLoading, mdiAlertOctagonOutline } from "@mdi/js";
 import './App.css';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import UserContext from "./UserProvider";
 
 function App() {
+  const { toggleIsAuthorized } = useContext(UserContext);
   const [listRecipesCall, setListRecipesCall] = useState({
     state: "pending",
   });
@@ -76,20 +78,20 @@ function App() {
       >
         <Container fluid>
           <Navbar.Brand>
-            My CookBook
+            CookBook
           </Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-sm`} />
           <Navbar.Offcanvas id={`offcanvasNavbar-expand-sm`}>
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id={`offcanvasNavbarLabel-expand-sm`}>
-                My CookBook
+                CookBook
               </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
                 {getRecipesListDropdown()}
                 <Nav.Link 
-                  style={{margin: "0 30px"}}
+                  style={{margin: "0 20px"}}
                   onClick={() => navigate("recipeList")}
                 >
                   Recepty
@@ -99,6 +101,10 @@ function App() {
                   >
                   Ingredience
                 </Nav.Link>
+                <NavDropdown title="Authorization" style={{margin: "0 20px"}}>
+                  <NavDropdown.Item onClick={() => toggleIsAuthorized(true)}>Authorized</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => toggleIsAuthorized(false)}>Unauthorized</NavDropdown.Item>
+                </NavDropdown>
               </Nav>
             </Offcanvas.Body>
           </Navbar.Offcanvas>
